@@ -46,11 +46,13 @@ network.host: 0.0.0.0
 cluster.name: "opensearch"
 http.port: 9200
 discovery.type: single-node
-knn.faiss.avx2.disabled: true
+knn.faiss.avx2.disabled: false
 knn.memory.circuit_breaker.limit: $CB_LIMIT%
 EOT
 
-sed -i -e "s/-Xms$HEAP/-Xms$HEAP/g" config/jvm.options
+# sed -i -e "s/-Xms$HEAP/-Xms$HEAP/g" config/jvm.options
+sed -i -e "s/-Xms1g/-Xms1g/g" config/jvm.options
+sed -i -e "s/-Xmx1g/-Xmx1g/g" config/jvm.options
 
 DIR=/home/ci-runner/opensearch/plugins/opensearch-knn
 

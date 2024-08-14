@@ -11,11 +11,11 @@
 set -ex
 
 build_knn() {
-    if [ "$OS_VERSION" == "2.14.0" ]
+    if [ "$OS_VERSION" == "2.16.0" ]
     then
-        if [ "$MEMORY_FIX" == "true" ]
+        if [ "$MEMORY_FIX" == "false" ]
         then
-            git clone https://github.com/navneet1v/k-NN.git  --branch memory-fix --recursive
+            git clone https://github.com/naveentatikonda/k-NN.git  --branch faiss-byte-vector-hnsw-2.16 --recursive
         else
             KNN_BRANCH=$(echo "$OS_VERSION" | rev | cut -c3- | rev)
             git clone https://github.com/opensearch-project/k-NN.git  --branch 2.x --recursive
@@ -32,10 +32,11 @@ build_knn() {
     gcc --version | head -n 1 | cut -d ' ' -f3
     echo "Running the scl_setup"
     # This is needed if you are using ci-image
-    bash /usr/local/bin/scl_setup
+    # bash /usr/local/bin/scl_setup
 
     chmod 755 ./scripts/build.sh
-    ./scripts/build.sh -v "$OS_VERSION" -s "$IS_SNAPSHOT"
+    ./scripts/build.sh -v "$OS_VERSION" -s "$IS_SNAPSHOT" -p "linux" -a "x64" 
+    # ./scripts/build.sh -v "$OS_VERSION" -p "linux" -a "x64" 
     if [ "$IS_SNAPSHOT" == "true" ]
     then
         mv /home/ci-runner/k-NN/artifacts/plugins/opensearch-knn-${OS_VERSION}.0-SNAPSHOT.zip /home/ci-runner/k-NN/artifacts/plugins/opensearch-knn.zip
